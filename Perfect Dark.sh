@@ -13,6 +13,8 @@ else
   controlfolder="/roms/ports/PortMaster"
 fi
 
+PORT_32BIT=Y
+
 source $controlfolder/control.txt
 source $controlfolder/device_info.txt
 [ -f "${controlfolder}/mod_${CFW_NAME}.txt" ] && source "${controlfolder}/mod_${CFW_NAME}.txt"
@@ -35,8 +37,9 @@ else
 fi
 
 # Run the game
-echo "Loading, please wait... (might take a while!)" > /dev/tty0 
-LD_LIBRARY_PATH="/usr/lib32" /usr/lib/ld-linux-armhf.so.3 ./pd.elf --rom-file ./rom/pd.ntsc-final.z64 --basedir $GAMEDIR --savedir $GAMEDIR
+echo "Loading, please wait... (might take a while!)" > /dev/tty0
+$GPTOKEYB "pd.elf" -c "pd.gptk" & 
+./pd.elf --rom-file $GAMEDIR/rom/pd.ntsc-final.z64 --basedir $GAMEDIR --savedir $GAMEDIR
 $ESUDO systemctl restart oga_events & 
 printf "\033c" >> /dev/tty1 
 printf "\033c" > /dev/tty0
